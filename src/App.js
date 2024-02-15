@@ -6,6 +6,8 @@ import Loader from './components/Loader';
 import Error from './components/Error';
 import Welcome from './components/Welcome';
 import Questions from './components/Questions';
+import NextButton from './components/NextButton';
+import Timer from './components/Timer';
 
 const initialState = {
   questions: [],
@@ -35,6 +37,9 @@ const reducer = (state, action) => {
           action.payload === question.correctOption ? state.points + question.points : state.points,
       };
     }
+
+    case 'nexQuestion':
+      return { ...state, answer: null, index: state.index + 1 };
 
     default:
       throw new Error('Action is unknown');
@@ -66,18 +71,18 @@ function App() {
         {status === 'error' && <Error />}
         {status === 'ready' && <Welcome numQuestions={questions.length} dispatch={dispatch} />}
         {status === 'active' && (
-          <Questions
-            question={questions[index]}
-            dispatch={dispatch}
-            answer={answer}
-            points={points}
-          />
+          <>
+            <Questions
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+              points={points}
+            />
+
+            <Timer />
+            <NextButton dispatch={dispatch} answer={answer} />
+          </>
         )}
-        {/* 
-        <div className='btn-container'>
-          <button className='btn btn-timer'>06:17</button>
-          <button className='btn btn-next'>Next</button>
-        </div> */}
       </Main>
     </div>
   );
