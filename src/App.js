@@ -1,48 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
-const questions = [
-  {
-    question: 'Which is the most popular JavaScript framework?',
-    options: ['Angular', 'React', 'Svelte', 'Vue'],
-    correctOption: 1,
-    points: 10,
-  },
-];
+import Header from './components/Header';
+import Main from './components/Main';
+
+const initialState = {
+  questions: [],
+
+  status: 'loading', // loading, erro, ready, active, finished
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'dataReceived':
+      return { ...state, questions: action.payload, status: 'ready' };
+    case 'dataFaild':
+      return { ...state, status: 'error' };
+
+    default:
+      throw new Error('Action is unknown');
+  }
+};
 
 function App() {
   const [isStarted, setIsStarted] = useState(false);
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    fetch('http://localhost:9000/questions')
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({ type: 'dataReceived', payload: data });
+      })
+      .catch((err) => {
+        dispatch({ type: 'dataFaild' });
+      });
+  });
+
   return (
     <div>
       <Header />
       <Main>
         <Welcome />
-        {isStarted && (
-          <>
-            <Qustion />
-            <div className='btn-container'>
-              <button className='btn btn-timer'>06:17</button>
-              <button className='btn btn-next'>Next</button>
-            </div>
-          </>
-        )}
+        <Qustion />
+        <div className='btn-container'>
+          <button className='btn btn-timer'>06:17</button>
+          <button className='btn btn-next'>Next</button>
+        </div>
       </Main>
     </div>
   );
-}
-
-function Header() {
-  return (
-    <header className='header'>
-      <div className='img-container'>
-        <img src='logo192.png' alt='logo' />
-      </div>
-      <h1>The React Quiz</h1>
-    </header>
-  );
-}
-
-function Main({ children }) {
-  return <main className='main'>{children}</main>;
 }
 
 function Welcome() {
@@ -60,7 +67,7 @@ function Welcome() {
 function Qustion() {
   return (
     <div className='question-container'>
-      <p>{questions[0].question}</p>
+      {/* <p>{questions[0].question}</p>
       <div>
         <span role='button' className='choice'>
           {questions[0].options[0]}
@@ -74,7 +81,7 @@ function Qustion() {
         <span role='button' className='choice'>
           {questions[0].options[3]}
         </span>
-      </div>
+      </div> */}
     </div>
   );
 }

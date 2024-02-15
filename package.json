@@ -15,6 +15,7 @@
   "scripts": {
     "start": "react-scripts start",
     "start-sass": "sass src/sass/main.scss src/index.css -w",
+    "server": "json-server -w src/assets/questions.json -p 9000",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
