@@ -20,8 +20,12 @@ body {
 .header {
   display: flex;
   align-items: center;
+  justify-content: space-around;
+  gap: 2rem;
   position: relative;
   border-bottom: 2px solid #495057;
+  width: 70vw;
+  margin: 4.8rem auto;
 }
 .header img {
   width: 20rem;
@@ -36,52 +40,97 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 70vw;
+  width: 60vw;
+  padding: 2.4rem 3.2rem;
   margin: 1rem auto;
 }
-.main p {
+.main .question-container {
+  max-width: 60rem;
+}
+.main .question-container p {
+  width: 100%;
+  padding: 1rem 2rem;
   font-size: 2.3rem;
   font-weight: 600;
   margin-bottom: 2.4rem;
 }
-.main span {
+.main .question-container span {
   display: block;
   color: #495057;
   background-color: #ffa94d;
-  margin: 1rem auto;
-  font-size: 1.6rem;
+  margin: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
   border-radius: 24rem;
-  padding: 1.2rem 2.4rem;
+  padding: 1.6rem 2.4rem;
   cursor: pointer;
 }
-.main span.choice {
-  transition: all 0.7s;
+.main .question-container span.choice {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  transition: all 0.5s;
+  box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.26);
 }
-.main span.choice:hover {
+.main .question-container span.choice:hover {
   color: #ced4da;
   background-color: #1098ad;
-  transform: translate(1rem, -2px);
+  transform: translate(6px, -4px);
 }
-.main span.choice:active {
-  transform: translateY(3px);
+.main .question-container span.choice:active {
+  box-shadow: 0.3rem 0.2rem 0.5rem rgba(0, 0, 0, 0.26);
+  transform: translate(7px, 2px);
 }
-.main .btn-container {
-  margin: 2rem auto;
-}
-.main .btn-container .btn {
+.main .btn {
   padding: 1.2rem 2.4rem;
   color: #ced4da;
-  border-radius: 2rem;
-  background-color: transparent;
+  border-radius: 2.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  background-color: #555d65;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.3s;
 }
-.main .btn-container .btn-timer {
-  background-color: inherit;
+.main .btn-start {
+  padding: 1.6rem 2.4rem;
+  margin-top: 2rem;
+  font-weight: 700;
+}
+.main .btn-timer {
+  background-color: transparent;
   border: 1px solid #ced4da;
 }
-.main .btn-container .btn-next {
-  background-color: #606a73;
+.main .btn-next {
   border: none;
+}
+.main .btn:not(.btn-timer):active {
+  transform: translate(3px, 1px);
+}
+.main .btn-container {
+  margin: 2rem;
+  padding: 1.5rem;
+  width: 60rem;
+  display: flex;
+  justify-content: space-between;
+}
+.main .Welcome {
+  text-align: center;
+}
+.main .Welcome h2 {
+  font-size: 3.6rem;
+  font-weight: 500;
+  margin-bottom: 4rem;
+}
+.main .Welcome h3 {
+  font-size: 2.4rem;
+  font-weight: 400;
+  margin-bottom: 3rem;
+}
+.main .Welcome h3 span {
+  font-weight: 700;
+  color: #ffa94d;
+  margin-right: 1rem;
 }
 
 /*# sourceMappingURL=index.css.map */

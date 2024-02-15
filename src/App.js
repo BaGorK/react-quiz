@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 const questions = [
   {
     question: 'Which is the most popular JavaScript framework?',
@@ -8,38 +10,71 @@ const questions = [
 ];
 
 function App() {
+  const [isStarted, setIsStarted] = useState(false);
   return (
-    <div className='App'>
-      <header className='header'>
-        <div className='img-container'>
-          <img src='logo192.png' alt='logo' />
-        </div>
-        <h1>The React Quiz</h1>
-      </header>
+    <div>
+      <Header />
+      <Main>
+        <Welcome />
+        {isStarted && (
+          <>
+            <Qustion />
+            <div className='btn-container'>
+              <button className='btn btn-timer'>06:17</button>
+              <button className='btn btn-next'>Next</button>
+            </div>
+          </>
+        )}
+      </Main>
+    </div>
+  );
+}
 
-      <main className='main'>
-        <div className='question-container'>
-          <p>Which is the most popular JavaScript framework?</p>
-          <div>
-            <span role='button' className='choice'>
-              State
-            </span>
-            <span role='button' className='choice'>
-              Props
-            </span>
-            <span role='button' className='choice'>
-              PropTypes
-            </span>
-            <span role='button' className='choice'>
-              Parameters
-            </span>
-          </div>
-        </div>
-        <div className='btn-container'>
-          <button className='btn btn-timer'>06:17</button>
-          <button className='btn btn-next'>Next</button>
-        </div>
-      </main>
+function Header() {
+  return (
+    <header className='header'>
+      <div className='img-container'>
+        <img src='logo192.png' alt='logo' />
+      </div>
+      <h1>The React Quiz</h1>
+    </header>
+  );
+}
+
+function Main({ children }) {
+  return <main className='main'>{children}</main>;
+}
+
+function Welcome() {
+  return (
+    <div className='Welcome'>
+      <h2>Welcome to the react quiz</h2>
+      <h3>
+        <span>15</span> Questions To Test Your React Mastery!
+      </h3>
+      <button className='btn btn-start'>Let's Start</button>
+    </div>
+  );
+}
+
+function Qustion() {
+  return (
+    <div className='question-container'>
+      <p>{questions[0].question}</p>
+      <div>
+        <span role='button' className='choice'>
+          {questions[0].options[0]}
+        </span>
+        <span role='button' className='choice'>
+          {questions[0].options[1]}
+        </span>
+        <span role='button' className='choice'>
+          {questions[0].options[2]}
+        </span>
+        <span role='button' className='choice'>
+          {questions[0].options[3]}
+        </span>
+      </div>
     </div>
   );
 }
