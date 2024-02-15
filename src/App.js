@@ -5,6 +5,7 @@ import Main from './components/Main';
 import Loader from './components/Loader';
 import Error from './components/Error';
 import Welcome from './components/Welcome';
+import Questions from './components/Questions';
 
 const initialState = {
   questions: [],
@@ -19,14 +20,15 @@ const reducer = (state, action) => {
     case 'dataFaild':
       return { ...state, status: 'error' };
 
+    case 'start':
+      return { ...state, status: 'active' };
+
     default:
       throw new Error('Action is unknown');
   }
 };
 
 function App() {
-  const [isStarted, setIsStarted] = useState(false);
-
   const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -46,36 +48,14 @@ function App() {
       <Main>
         {status === 'loading' && <Loader />}
         {status === 'error' && <Error />}
-        {status === 'ready' && <Welcome numQuestions={questions.length} />}
-        {/* <Welcome />
-        <Qustion />
+        {status === 'ready' && <Welcome numQuestions={questions.length} dispatch={dispatch} />}
+        {status === 'active' && <Questions />}
+        {/* 
         <div className='btn-container'>
           <button className='btn btn-timer'>06:17</button>
           <button className='btn btn-next'>Next</button>
         </div> */}
       </Main>
-    </div>
-  );
-}
-
-function Qustion() {
-  return (
-    <div className='question-container'>
-      {/* <p>{questions[0].question}</p>
-      <div>
-        <span role='button' className='choice'>
-          {questions[0].options[0]}
-        </span>
-        <span role='button' className='choice'>
-          {questions[0].options[1]}
-        </span>
-        <span role='button' className='choice'>
-          {questions[0].options[2]}
-        </span>
-        <span role='button' className='choice'>
-          {questions[0].options[3]}
-        </span>
-      </div> */}
     </div>
   );
 }
