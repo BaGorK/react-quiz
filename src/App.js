@@ -11,6 +11,9 @@ const initialState = {
   questions: [],
 
   status: 'loading', // loading, erro, ready, active, finished
+  index: 0,
+  answer: null,
+  points: 0,
 };
 
 const reducer = (state, action) => {
@@ -23,13 +26,26 @@ const reducer = (state, action) => {
     case 'start':
       return { ...state, status: 'active' };
 
+    case 'newAnswer': {
+      const question = state.questions[state.index];
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === question.correctOption ? state.points + question.points : state.points,
+      };
+    }
+
     default:
       throw new Error('Action is unknown');
   }
 };
 
 function App() {
-  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
   useEffect(() => {
     fetch('http://localhost:9000/questions')
@@ -49,7 +65,14 @@ function App() {
         {status === 'loading' && <Loader />}
         {status === 'error' && <Error />}
         {status === 'ready' && <Welcome numQuestions={questions.length} dispatch={dispatch} />}
-        {status === 'active' && <Questions />}
+        {status === 'active' && (
+          <Questions
+            question={questions[index]}
+            dispatch={dispatch}
+            answer={answer}
+            points={points}
+          />
+        )}
         {/* 
         <div className='btn-container'>
           <button className='btn btn-timer'>06:17</button>

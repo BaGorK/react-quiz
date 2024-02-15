@@ -18,9 +18,8 @@
       margin-bottom: 2.4rem;
     }
 
-    span {
+    button.choice {
       display: block;
-      color: $color-dark;
       margin: 2rem;
       font-size: 1.8rem;
       font-weight: 700;
@@ -28,33 +27,45 @@
       padding: 1.6rem 2.4rem;
       cursor: pointer;
 
-      &.choice {
-        width: 80%;
-        margin-left: auto;
-        margin-right: auto;
-        transition: all 0.3s;
+      text-align: left;
+      width: 80%;
+      transition: all 0.3s;
+      color: $color-medium;
+      box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.26);
+      background-color: lighten($color: $color-dark, $amount: 5);
+      border: 2px solid lighten($color: $color-dark, $amount: 5);
+
+      &:not([disabled]):hover {
         color: $color-medium;
-        box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.26);
-        background-color: lighten($color: $color-dark, $amount: 5);
-        border: 1px solid lighten($color: $color-dark, $amount: 5);
+        background-color: inherit;
+        transform: translateX(2rem);
+      }
+
+      &[disabled]:hover {
+        cursor: not-allowed;
+      }
+
+      &-answer {
+        transform: translateX(2rem);
+      }
+
+      &-correct {
+        background-color: $color-theme;
+        border: 2px solid $color-theme;
+        color: $color-light;
 
         &:hover {
-          color: $color-medium;
-          background-color: transparent;
-          transform: translate(1rem, -4px);
-        }
-
-        &:active {
-          box-shadow: 0.3rem 0.2rem 0.5rem rgba(0, 0, 0, 0.26);
-          transform: translate(7px, 2px);
-        }
-
-        &-correct {
-          background-color: $color-accent;
-        }
-
-        &-wrong {
           background-color: $color-theme;
+        }
+      }
+
+      &-wrong {
+        background-color: $color-accent;
+        border: 2px solid $color-accent;
+        color: $color-darkest;
+
+        &:hover {
+          background-color: $color-accent;
         }
       }
     }

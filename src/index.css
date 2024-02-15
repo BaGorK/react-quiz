@@ -54,40 +54,48 @@ body {
   font-weight: 600;
   margin-bottom: 2.4rem;
 }
-.main .question-container span {
+.main .question-container button.choice {
   display: block;
-  color: #495057;
   margin: 2rem;
   font-size: 1.8rem;
   font-weight: 700;
   border-radius: 24rem;
   padding: 1.6rem 2.4rem;
   cursor: pointer;
-}
-.main .question-container span.choice {
+  text-align: left;
   width: 80%;
-  margin-left: auto;
-  margin-right: auto;
   transition: all 0.3s;
   color: #ced4da;
   box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.26);
   background-color: #555d65;
-  border: 1px solid #555d65;
+  border: 2px solid #555d65;
 }
-.main .question-container span.choice:hover {
+.main .question-container button.choice:not([disabled]):hover {
   color: #ced4da;
-  background-color: transparent;
-  transform: translate(1rem, -4px);
+  background-color: inherit;
+  transform: translateX(2rem);
 }
-.main .question-container span.choice:active {
-  box-shadow: 0.3rem 0.2rem 0.5rem rgba(0, 0, 0, 0.26);
-  transform: translate(7px, 2px);
+.main .question-container button.choice[disabled]:hover {
+  cursor: not-allowed;
 }
-.main .question-container span.choice-correct {
-  background-color: #ffa94d;
+.main .question-container button.choice-answer {
+  transform: translateX(2rem);
 }
-.main .question-container span.choice-wrong {
+.main .question-container button.choice-correct {
   background-color: #1098ad;
+  border: 2px solid #1098ad;
+  color: #f1f3f5;
+}
+.main .question-container button.choice-correct:hover {
+  background-color: #1098ad;
+}
+.main .question-container button.choice-wrong {
+  background-color: #ffa94d;
+  border: 2px solid #ffa94d;
+  color: #343a40;
+}
+.main .question-container button.choice-wrong:hover {
+  background-color: #ffa94d;
 }
 .main .btn {
   padding: 1.2rem 2.4rem;
