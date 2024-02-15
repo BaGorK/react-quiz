@@ -2,6 +2,9 @@ import { useEffect, useReducer, useState } from 'react';
 
 import Header from './components/Header';
 import Main from './components/Main';
+import Loader from './components/Loader';
+import Error from './components/Error';
+import Welcome from './components/Welcome';
 
 const initialState = {
   questions: [],
@@ -24,7 +27,7 @@ const reducer = (state, action) => {
 function App() {
   const [isStarted, setIsStarted] = useState(false);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     fetch('http://localhost:9000/questions')
@@ -35,31 +38,22 @@ function App() {
       .catch((err) => {
         dispatch({ type: 'dataFaild' });
       });
-  });
+  }, []);
 
   return (
     <div>
       <Header />
       <Main>
-        <Welcome />
+        {status === 'loading' && <Loader />}
+        {status === 'error' && <Error />}
+        {status === 'ready' && <Welcome numQuestions={questions.length} />}
+        {/* <Welcome />
         <Qustion />
         <div className='btn-container'>
           <button className='btn btn-timer'>06:17</button>
           <button className='btn btn-next'>Next</button>
-        </div>
+        </div> */}
       </Main>
-    </div>
-  );
-}
-
-function Welcome() {
-  return (
-    <div className='Welcome'>
-      <h2>Welcome to the react quiz</h2>
-      <h3>
-        <span>15</span> Questions To Test Your React Mastery!
-      </h3>
-      <button className='btn btn-start'>Let's Start</button>
     </div>
   );
 }
