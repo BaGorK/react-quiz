@@ -8,6 +8,7 @@ import Welcome from './components/Welcome';
 import Questions from './components/Questions';
 import NextButton from './components/NextButton';
 import Timer from './components/Timer';
+import Progress from './components/Progress';
 
 const initialState = {
   questions: [],
@@ -37,7 +38,6 @@ const reducer = (state, action) => {
           action.payload === question.correctOption ? state.points + question.points : state.points,
       };
     }
-
     case 'nexQuestion':
       return { ...state, answer: null, index: state.index + 1 };
 
@@ -54,11 +54,16 @@ function App() {
 
   useEffect(() => {
     fetch('http://localhost:9000/questions')
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error('Something went wrong with fetching the data');
+
+        return res.json();
+      })
       .then((data) => {
         dispatch({ type: 'dataReceived', payload: data });
       })
       .catch((err) => {
+        console.log('emoji', err.props.children[1]);
         dispatch({ type: 'dataFaild' });
       });
   }, []);
@@ -72,6 +77,7 @@ function App() {
         {status === 'ready' && <Welcome numQuestions={questions.length} dispatch={dispatch} />}
         {status === 'active' && (
           <>
+            <Progress index={index} questions={questions} points={points} answer={answer} />
             <Questions
               question={questions[index]}
               dispatch={dispatch}
