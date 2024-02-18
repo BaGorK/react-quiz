@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 
 import Header from './components/Header';
 import Main from './components/Main';
@@ -14,7 +14,7 @@ import Finished from './components/Finished';
 const initialState = {
   questions: [],
 
-  status: 'loading', // loading, erro, ready, active, finished
+  status: 'loading', // loading, error, ready, active, finished
   index: 0,
   answer: null,
   points: 0,
@@ -25,6 +25,7 @@ const reducer = (state, action) => {
   switch (action.type) {
     case 'dataReceived':
       return { ...state, questions: action.payload, status: 'ready' };
+
     case 'dataFaild':
       return { ...state, status: 'error' };
 
@@ -40,6 +41,7 @@ const reducer = (state, action) => {
           action.payload === question.correctOption ? state.points + question.points : state.points,
       };
     }
+
     case 'nextQuestion':
       return { ...state, answer: null, index: state.index + 1 };
 
@@ -49,6 +51,9 @@ const reducer = (state, action) => {
         status: 'finished',
         highscore: state.points > state.highscore ? state.points : state.highscore,
       };
+
+    case 'restart':
+      return { ...initialState, questions: state.questions, status: 'ready' };
 
     default:
       throw new Error('Action is unknown');
@@ -71,13 +76,12 @@ function App() {
       .then((data) => {
         dispatch({ type: 'dataReceived', payload: data });
       })
-      .catch((err) => {
-        console.log('emoji', err.props.children[1]);
+      .catch(() => {
         dispatch({ type: 'dataFaild' });
       });
   }, []);
 
-  const maxValue = questions.reduce((acc, val) => acc + val.points, 0);
+  const maxValue = questions.reduce((acc, curQuestion) => acc + curQuestion.points, 0);
   const numQuestions = questions.length;
 
   return (
@@ -109,7 +113,12 @@ function App() {
         )}
 
         {status === 'finished' && (
-          <Finished points={points} maxPossiblePoints={maxValue} highscore={highscore} />
+          <Finished
+            points={points}
+            dispatch={dispatch}
+            maxPossiblePoints={maxValue}
+            highscore={highscore}
+          />
         )}
       </Main>
     </div>
