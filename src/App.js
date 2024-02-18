@@ -11,6 +11,8 @@ import Timer from './components/Timer';
 import Progress from './components/Progress';
 import Finished from './components/Finished';
 
+const SECONDS_PER_QUESTION = 30;
+
 const initialState = {
   questions: [],
 
@@ -19,6 +21,7 @@ const initialState = {
   answer: null,
   points: 0,
   highscore: 0,
+  secondsRemaining: 0,
 };
 
 const reducer = (state, action) => {
@@ -30,7 +33,11 @@ const reducer = (state, action) => {
       return { ...state, status: 'error' };
 
     case 'start':
-      return { ...state, status: 'active' };
+      return {
+        ...state,
+        status: 'active',
+        secondsRemaining: state.questions.length * SECONDS_PER_QUESTION,
+      };
 
     case 'newAnswer': {
       const question = state.questions[state.index];
@@ -38,7 +45,9 @@ const reducer = (state, action) => {
         ...state,
         answer: action.payload,
         points:
-          action.payload === question.correctOption ? state.points + question.points : state.points,
+          action.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
       };
     }
 
@@ -49,7 +58,15 @@ const reducer = (state, action) => {
       return {
         ...state,
         status: 'finished',
-        highscore: state.points > state.highscore ? state.points : state.highscore,
+        highscore:
+          state.points > state.highscore ? state.points : state.highscore,
+      };
+
+    case 'tick':
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining - 1,
+        status: state.secondsRemaining === 0 ? 'finished' : state.status,
       };
 
     case 'restart':
@@ -61,15 +78,16 @@ const reducer = (state, action) => {
 };
 
 function App() {
-  const [{ questions, status, index, answer, highscore, points }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [
+    { questions, status, index, answer, highscore, points, secondsRemaining },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     fetch('http://localhost:9000/questions')
       .then((res) => {
-        if (!res.ok) throw new Error('Something went wrong with fetching the data');
+        if (!res.ok)
+          throw new Error('Something went wrong with fetching the data');
 
         return res.json();
       })
@@ -81,7 +99,10 @@ function App() {
       });
   }, []);
 
-  const maxValue = questions.reduce((acc, curQuestion) => acc + curQuestion.points, 0);
+  const maxValue = questions.reduce(
+    (acc, curQuestion) => acc + curQuestion.points,
+    0
+  );
   const numQuestions = questions.length;
 
   return (
@@ -90,7 +111,9 @@ function App() {
       <Main>
         {status === 'loading' && <Loader />}
         {status === 'error' && <Error />}
-        {status === 'ready' && <Welcome numQuestions={numQuestions} dispatch={dispatch} />}
+        {status === 'ready' && (
+          <Welcome numQuestions={numQuestions} dispatch={dispatch} />
+        )}
         {status === 'active' && (
           <>
             <Progress
@@ -107,8 +130,13 @@ function App() {
               points={points}
             />
 
-            <Timer />
-            <NextButton dispatch={dispatch} index={index} questions={questions} answer={answer} />
+            <Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
+            <NextButton
+              dispatch={dispatch}
+              index={index}
+              questions={questions}
+              answer={answer}
+            />
           </>
         )}
 
